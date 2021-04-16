@@ -3,12 +3,29 @@ import "./App.css";
 import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 
-const HELLO = gql`query { hello }`;
+const HELLO = gql`query { 
+  hello 
+  rollThreeDice
+  random
+  quoteOfTheDay
+}`;
 
 function App() {
   const { loading, error, data } = useQuery(HELLO);
   const curData = (data && data.hello) || 'not set'
+  const qod = (data && data.quoteOfTheDay) || 'not set'
+  const rn = (data && data.random) || 'not set'
   const [output, setOutput] = useState("not set");
+
+  function threeDice() {
+    if (!data) return
+
+    const {rollThreeDice} = data
+    if (!rollThreeDice) return
+
+    return rollThreeDice.map((dice, idx) => (<li key={idx}>{dice}</li>))
+  }
+
   if (loading) console.log('loading')
   if (error) console.log('error')
   function callApi() {
@@ -40,6 +57,9 @@ function App() {
         </button>
         <div>{output}</div>
         <div>graphql output with data {curData}</div>
+        <ol>three dice {threeDice()}</ol>
+        <div>today's quote: {qod}</div>
+        <div>random number: {rn}</div>
       </header>
     </div>
   );
