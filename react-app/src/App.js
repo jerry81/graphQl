@@ -5,7 +5,7 @@ import { gql, useQuery } from "@apollo/client";
 
 const HELLO = gql`query { 
   hello 
-  rollThreeDice
+  roll(numDice: 12, numSides: 15)
   random
   quoteOfTheDay
 }`;
@@ -20,10 +20,10 @@ function App() {
   function threeDice() {
     if (!data) return
 
-    const {rollThreeDice} = data
-    if (!rollThreeDice) return
+    const {roll} = data
+    if (!roll) return
 
-    return rollThreeDice.map((dice, idx) => (<li key={idx}>{dice}</li>))
+    return roll.map((dice, idx) => (<li key={idx}>{dice}</li>))
   }
 
   if (loading) console.log('loading')
